@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobFiller - Options</title>
+  <style>
+    :root {
+      --primary-color: #4a6cf7;
+      --primary-light: #e1e7ff;
+      --primary-dark: #3a5ce7;
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --info-color: #17a2b8;
+      --light-gray: #f8f9fa;
+      --gray: #6c757d;
+      --dark-gray: #343a40;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #4a6cf7, #4a8ef7);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 5px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    
+    .card-header {
+      padding: 15px 20px;
+      background-color: var(--light-gray);
+      border-bottom: 1px solid #eee;
+      font-weight: 600;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .card-body {
+      padding: 20px;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      font-weight: 500;
+      color: var(--gray);
+    }
+    
+    .tab.active {
+      border-bottom-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: var(--dark-gray);
+      font-size: 14px;
+    }
+    
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    
+    .button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .button-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .button-primary:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .button-secondary {
+      background-color: var(--light-gray);
+      color: var(--dark-gray);
+    }
+    
+    .button-secondary:hover {
+      background-color: #e2e6ea;
+    }
+    
+    .button-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    .button-danger:hover {
+      background-color: #c82333;
+    }
+    
+    .button-icon {
+      margin-right: 8px;
+      width: 16px;
+      height: 16px;
+    }
+    
+    .resume-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .resume-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .resume-item:last-child {
+      border-bottom: none;
+    }
+    
+    .resume-info {
+      flex: 1;
+    }
+    
+    .resume-name {
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--dark-gray);
+    }
+    
+    .resume-date {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 3px;
+    }
+    
+    .resume-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .action-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      color: var(--gray);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .action-button:hover {
+      background-color: var(--light-gray);
+      color: var(--dark-gray);
+    }
+    
+    .action-button svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .drop-area {
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 40px 20px;
+      text-align: center;
+      transition: all 0.3s;
+      background-color: var(--light-gray);
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .drop-area.drag-over {
+      border-color: var(--primary-color);
+      background-color: var(--primary-light);
+    }
+    
+    .drop-area-icon {
+      font-size: 36px;
+      margin-bottom: 15px;
+      color: var(--gray);
+    }
+    
+    .drop-area-text {
+      color: var(--gray);
+      margin-bottom: 15px;
+    }
+    
+    .file-input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .active-badge {
+      display: inline-block;
+      background-color: var(--success-color);
+      color: white;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 8px;
+      font-weight: normal;
+    }
+    
+    .json-editor {
+      width: 100%;
+      height: 400px;
+      font-family: monospace;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.5;
+      tab-size: 2;
+      resize: vertical;
+    }
+    
+    .status-message {
+      padding: 15px;
+      border-radius: 4px;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    
+    .status-success {
+      background-color: #d4edda;
+      color: var(--success-color);
+    }
+    
+    .status-error {
+      background-color: #f8d7da;
+      color: var(--danger-color);
+    }
+    
+    .status-warning {
+      background-color: #fff3cd;
+      color: var(--warning-color);
+    }
+    
+    .status-info {
+      background-color: #d1ecf1;
+      color: var(--info-color);
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+    }
+    
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--gray);
+      background-color: var(--light-gray);
+      margin-top: 40px;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .card-header, .card-body {
+        padding: 15px;
+      }
+      
+      .resume-actions {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JobFiller Options</h1>
+    <div class="subtitle">Upload and manage your resumes for automatic job applications</div>
+  </header>
+  
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" data-tab="manage-resumes">Manage Resumes</div>
+      <div class="tab" data-tab="upload-resume">Upload Resume</div>
+      <div class="tab" data-tab="field-mappings">Field Mappings</div>
+      <div class="tab" data-tab="settings">Settings</div>
+    </div>
+    
+    <!-- Manage Resumes Tab -->
+    <div class="tab-content active" id="manage-resumes-content">
+      <div class="card">
+        <div class="card-header">
+          Your Resumes
+          <button id="refreshResumeListBtn" class="action-button" title="Refresh list">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 11A8.1 8.1 0 0 0 4.5 9"></path>
+              <path d="M4 5v4h4"></path>
+              <path d="M4 13a8.1 8.1 0 0 0 15.5 2"></path>
+              <path d="M20 19v-4h-4"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="card-body">
+          <div id="resumeList" class="resume-list">
+            <!-- Resume items will be populated here -->
+            <div class="empty-state" id="noResumesMessage">
+              <div class="empty-state-icon">📄</div>
+              <p>No resumes found</p>
+              <p>Upload a resume to get started</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Upload Resume Tab -->
+    <div class="tab-content" id="upload-resume-content">
+      <div class="card">
+        <div class="card-header">Upload New Resume</div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="resumeName">Resume Name/Label:</label>
+            <input type="text" id="resumeName" placeholder="e.g. Software Developer Resume 2025">
+          </div>
+          
+          <div class="form-group">
+            <label>Upload Resume File (PDF):</label>
+            <div class="drop-area" id="dropArea">
+              <div class="drop-area-icon">📁</div>
+              <div class="drop-area-text">Drag & drop your resume file here<br>or click to browse</div>
+              <input type="file" id="resumeFile" class="file-input" accept=".pdf,.json">
+            </div>
+            <small style="display: block; margin-top: 8px; color: var(--gray);">
+              Accepted formats: PDF, JSON
+            </small>
+          </div>
+          
+          <div class="form-group" style="text-align: right;">
+            <button id="uploadResumeBtn" class="button button-primary">
+              <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              Upload Resume
+            </button>
+          </div>
+          
+          <div id="uploadStatus" class="status-message hidden"></div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">Or Create/Edit Resume JSON Directly</div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="jsonEditor">Resume JSON:</label>
+            <textarea id="jsonEditor" class="json-editor" placeholder='{
+  "personal": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "123-456-7890",
+    "address": "New York, NY",
+    "linkedin": "https://www.linkedin.com/in/johndoe",
+    "website": "https://johndoe.com"
+  },
+  "summary": "Experienced software developer...",
+  "experience": [
+    {
+      "company": "Tech Company",
+      "title": "Senior Developer",
+      "startDate": "Jan 2020",
+      "endDate": "Present",
+      "location": "New York, NY",
+      "description": "Working on...",
+      "bullets": [
+        "Developed feature X that improved Y by Z%",
+        "Led team of 5 developers"
+      ]
+    }
+  ],
+  "education": [...],
+  "skills": [...]
+}'></textarea>
+          </div>
+          
+          <div class="form-group" style="text-align: right;">
+            <button id="saveJsonResumeBtn" class="button button-primary">
+              <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+              Save JSON Resume
+            </button>
+          </div>
+          
+          <div id="jsonStatus" class="status-message hidden"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Field Mappings Tab -->
+    <div class="tab-content" id="field-mappings-content">
+      <div class="card">
+        <div class="card-header">Site Field Mappings</div>
+        <div class="card-body">
+          <p>Field mappings allow JobFiller to correctly identify form fields on specific websites.</p>
+          <p>You can set up custom field mappings when you click "Map Fields for This Site" in the extension popup.</p>
+          
+          <div id="mappingsList">
+            <!-- Mapping items will be populated here -->
+            <div class="empty-state" id="noMappingsMessage">
+              <div class="empty-state-icon">🔗</div>
+              <p>No custom field mappings yet</p>
+              <p>Mappings will be created when you use the extension on job sites</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Settings Tab -->
+    <div class="tab-content" id="settings-content">
+      <div class="card">
+        <div class="card-header">General Settings</div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="defaultResumeSelect">Default Resume:</label>
+            <select id="defaultResumeSelect" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="">Loading resumes...</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="autofillOnLoadCheckbox">
+              Automatically fill forms when page loads
+            </label>
+            <small style="display: block; margin-top: 5px; color: var(--gray);">
+              When enabled, JobFiller will attempt to fill out job applications automatically when the page loads
+            </small>
+          </div>
+          
+          <div class="form-group" style="text-align: right;">
+            <button id="saveSettingsBtn" class="button button-primary">
+              <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+              Save Settings
+            </button>
+          </div>
+          
+          <div id="settingsStatus" class="status-message hidden"></div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">About JobFiller</div>
+        <div class="card-body">
+          <p><strong>Version:</strong> 1.0</p>
+          <p>JobFiller is a Chrome extension that helps you automate the tedious process of filling out job applications by extracting information from your resume.</p>
+          <p>All your data is stored locally in your browser. Your privacy matters to us.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>JobFiller - Making job applications easier</p>
+    <p>&copy; 2025 - All rights reserved</p>
+  </div>
+  
+  <script src="pdf.min.js"></script>
+  <script src="pdf.worker.min.js"></script>
+  <script src="pdf-parser.js"></script>
+  <script src="resume-storage.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobFiller - Help & Instructions</title>
+  <style>
+    :root {
+      --primary-color: #4a6cf7;
+      --primary-light: #e1e7ff;
+      --primary-dark: #3a5ce7;
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --info-color: #17a2b8;
+      --light-gray: #f8f9fa;
+      --gray: #6c757d;
+      --dark-gray: #343a40;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #4a6cf7, #4a8ef7);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 5px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    
+    .card-header {
+      padding: 15px 20px;
+      background-color: var(--light-gray);
+      border-bottom: 1px solid #eee;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    .card-body {
+      padding: 20px;
+    }
+    
+    h2 {
+      color: var(--primary-color);
+      font-size: 20px;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+    
+    h3 {
+      color: var(--dark-gray);
+      font-size: 18px;
+      margin-top: 25px;
+      margin-bottom: 10px;
+    }
+    
+    ol, ul {
+      padding-left: 25px;
+    }
+    
+    li {
+      margin-bottom: 8px;
+    }
+    
+    .step {
+      background-color: var(--light-gray);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .step-number {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: white;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+      font-weight: 600;
+    }
+    
+    .step-title {
+      font-weight: 600;
+      font-size: 16px;
+      display: inline-block;
+    }
+    
+    .step-content {
+      margin-top: 10px;
+      margin-left: 40px;
+    }
+    
+    .image-container {
+      margin: 20px 0;
+      text-align: center;
+    }
+    
+    img {
+      max-width: 100%;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .caption {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 8px;
+    }
+    
+    .tip {
+      background-color: var(--primary-light);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    .tip-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--primary-dark);
+    }
+    
+    .warning {
+      background-color: #fff3cd;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      border-left: 4px solid var(--warning-color);
+    }
+    
+    .warning-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #856404;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--gray);
+      background-color: var(--light-gray);
+      margin-top: 40px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    th {
+      background-color: var(--light-gray);
+      font-weight: 500;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 8px 15px;
+      background-color: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      margin-top: 10px;
+    }
+    
+    .btn:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .card-header, .card-body {
+        padding: 15px;
+      }
+      
+      .step-content {
+        margin-left: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JobFiller Help & Instructions</h1>
+    <div class="subtitle">Learn how to use JobFiller to streamline your job applications</div>
+  </header>
+  
+  <div class="container">
+    <div class="card">
+      <div class="card-header">Getting Started</div>
+      <div class="card-body">
+        <h2>Welcome to JobFiller!</h2>
+        <p>JobFiller is a Chrome extension that makes applying for jobs easier by automatically filling out application forms using your resume data. This guide will help you understand how to set up and use JobFiller effectively.</p>
+        
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-title">Upload Your Resume</div>
+          <div class="step-content">
+            <p>Before you can start using JobFiller, you need to upload your resume:</p>
+            <ol>
+              <li>Click the JobFiller icon in your Chrome toolbar and select <strong>Manage Resumes</strong></li>
+              <li>In the options page, click the <strong>Upload Resume</strong> tab</li>
+              <li>Enter a name for your resume (e.g., "Software Developer Resume 2025")</li>
+              <li>Drag and drop your resume PDF file or click to browse</li>
+              <li>Click <strong>Upload Resume</strong></li>
+            </ol>
+            <p>JobFiller will parse your resume and extract all the important information, including your personal details, work experience, education, skills, and more.</p>
+          </div>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-title">Fill Out Job Applications</div>
+          <div class="step-content">
+            <p>When you're on a job application page:</p>
+            <ol>
+              <li>Click the JobFiller icon in your Chrome toolbar</li>
+              <li>Select the resume you want to use from the dropdown (if you have multiple)</li>
+              <li>Click <strong>Autofill This Application</strong></li>
+            </ol>
+            <p>JobFiller will automatically fill out the form fields with information from your resume. You can then review and make any necessary adjustments before submitting.</p>
+          </div>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-title">Map Fields for Custom Sites</div>
+          <div class="step-content">
+            <p>If JobFiller doesn't correctly identify form fields on a particular job site:</p>
+            <ol>
+              <li>Click the JobFiller icon in your Chrome toolbar</li>
+              <li>Click <strong>Map Fields for This Site</strong></li>
+              <li>For each form field, select the corresponding resume field from the dropdown</li>
+              <li>Click <strong>Save Mappings</strong></li>
+            </ol>
+            <p>These mappings will be saved for the specific website, so you won't need to map fields again for future applications on the same site.</p>
+          </div>
+        </div>
+        
+        <div class="tip">
+          <div class="tip-title">Pro Tip</div>
+          <p>You can upload multiple resumes and switch between them for different types of job applications. For example, you might have one resume for technical roles and another for management positions.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">Advanced Features</div>
+      <div class="card-body">
+        <h3>Multiple Resume Management</h3>
+        <p>JobFiller allows you to store and manage multiple resumes:</p>
+        <ul>
+          <li><strong>Upload different versions</strong> tailored to specific job types or industries</li>
+          <li><strong>Set a default resume</strong> that will be used automatically</li>
+          <li><strong>View and edit</strong> your resume data directly in JSON format</li>
+          <li><strong>Delete outdated resumes</strong> when they're no longer needed</li>
+        </ul>
+        
+        <h3>Custom Field Mappings</h3>
+        <p>Different job sites use different field names and structures. JobFiller allows you to create custom mappings for each site:</p>
+        <ul>
+          <li>Map resume fields to form fields based on their labels or IDs</li>
+          <li>Save mappings per domain, so they apply automatically on future visits</li>
+          <li>Review and update mappings as needed</li>
+        </ul>
+        
+        <h3>Auto-fill on Page Load</h3>
+        <p>You can configure JobFiller to automatically fill out forms as soon as you open a job application page:</p>
+        <ol>
+          <li>Click the JobFiller icon and select <strong>Manage Resumes</strong></li>
+          <li>Go to the <strong>Settings</strong> tab</li>
+          <li>Check the <strong>Automatically fill forms when page loads</strong> option</li>
+          <li>Click <strong>Save Settings</strong></li>
+        </ol>
+        
+        <div class="warning">
+          <div class="warning-title">Important Note</div>
+          <p>Auto-fill on page load is convenient but may not work perfectly on all sites. It's always a good idea to review the filled information before submitting an application.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">Troubleshooting</div>
+      <div class="card-body">
+        <h3>Form Fields Not Being Filled</h3>
+        <p>If JobFiller isn't filling certain fields correctly:</p>
+        <ol>
+          <li>Check if the field is visible and enabled on the page</li>
+          <li>Use the "Map Fields for This Site" feature to create a custom mapping</li>
+          <li>Make sure your resume contains the required information</li>
+          <li>Some fields may require manual filling (like file uploads or captchas)</li>
+        </ol>
+        
+        <h3>Resume Parsing Issues</h3>
+        <p>If your resume isn't being parsed correctly:</p>
+        <ol>
+          <li>Make sure your PDF is text-based and not a scanned image</li>
+          <li>Try using a simpler resume format with clear section headers</li>
+          <li>You can manually edit the parsed resume JSON in the Options page</li>
+          <li>Alternatively, create a JSON resume directly using the editor in the Options page</li>
+        </ol>
+        
+        <h3>Extension Not Working</h3>
+        <p>If JobFiller isn't working at all:</p>
+        <ol>
+          <li>Make sure the extension is enabled in Chrome</li>
+          <li>Check that you have at least one resume uploaded</li>
+          <li>Try refreshing the page before using the extension</li>
+          <li>Some sites use complex forms that may not be fully compatible</li>
+        </ol>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">Privacy & Security</div>
+      <div class="card-body">
+        <p>JobFiller is designed with your privacy in mind:</p>
+        <ul>
+          <li>All your resume data is stored locally in your browser storage</li>
+          <li>No data is sent to any external servers or third parties</li>
+          <li>The extension only operates on job application websites</li>
+          <li>Resume parsing happens entirely within your browser</li>
+        </ul>
+        
+        <p>To ensure maximum security:</p>
+        <ul>
+          <li>Keep your Chrome browser and the JobFiller extension updated</li>
+          <li>Review the permissions requested by the extension</li>
+          <li>Always check the filled information before submitting applications</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="action-buttons" style="text-align: center; margin-top: 30px;">
+      <a href="options.html" class="btn">Go to Options Page</a>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>JobFiller - Making job applications easier</p>
+    <p>&copy; 2025 - All rights reserved</p>
+  </div>
+</body>
+</html>

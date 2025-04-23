@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobFiller - Field Mapper</title>
+  <style>
+    :root {
+      --primary-color: #4a6cf7;
+      --primary-light: #e1e7ff;
+      --primary-dark: #3a5ce7;
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --info-color: #17a2b8;
+      --light-gray: #f8f9fa;
+      --gray: #6c757d;
+      --dark-gray: #343a40;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #4a6cf7, #4a8ef7);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 5px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    
+    .card-header {
+      padding: 15px 20px;
+      background-color: var(--light-gray);
+      border-bottom: 1px solid #eee;
+      font-weight: 600;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .card-body {
+      padding: 20px;
+    }
+    
+    .site-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: var(--light-gray);
+      border-radius: 8px;
+    }
+    
+    .site-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .site-details {
+      flex: 1;
+    }
+    
+    .site-domain {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 3px;
+    }
+    
+    .site-url {
+      font-size: 12px;
+      color: var(--gray);
+      word-break: break-all;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    th {
+      background-color: var(--light-gray);
+      font-weight: 500;
+      color: var(--dark-gray);
+    }
+    
+    tr:hover {
+      background-color: var(--light-gray);
+    }
+    
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    
+    .unmapped {
+      color: var(--danger-color);
+      font-style: italic;
+    }
+    
+    .button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .button-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .button-primary:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .button-secondary {
+      background-color: var(--light-gray);
+      color: var(--dark-gray);
+    }
+    
+    .button-secondary:hover {
+      background-color: #e2e6ea;
+    }
+    
+    .resume-field-select {
+      width: 100%;
+    }
+    
+    .action-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .button-icon {
+      margin-right: 8px;
+      width: 16px;
+      height: 16px;
+    }
+    
+    .status-message {
+      padding: 15px;
+      border-radius: 4px;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    
+    .status-success {
+      background-color: #d4edda;
+      color: var(--success-color);
+    }
+    
+    .status-error {
+      background-color: #f8d7da;
+      color: var(--danger-color);
+    }
+    
+    .status-warning {
+      background-color: #fff3cd;
+      color: var(--warning-color);
+    }
+    
+    .status-info {
+      background-color: #d1ecf1;
+      color: var(--info-color);
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+    }
+    
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--gray);
+      background-color: var(--light-gray);
+      margin-top: 40px;
+    }
+    
+    .custom-mapping {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .custom-mapping-input {
+      flex: 1;
+    }
+    
+    .filter-controls {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .search-input {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      flex: 1;
+      max-width: 300px;
+    }
+    
+    .filter-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .filter-checkbox input {
+      margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .card-header, .card-body {
+        padding: 15px;
+      }
+      
+      .filter-controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .search-input {
+        max-width: 100%;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JobFiller Field Mapper</h1>
+    <div class="subtitle">Map resume fields to job application form fields</div>
+  </header>
+  
+  <div class="container">
+    <div class="site-info">
+      <div class="site-icon">🌐</div>
+      <div class="site-details">
+        <div class="site-domain" id="siteDomain">Loading...</div>
+        <div class="site-url" id="siteUrl">Loading...</div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        Field Mappings
+        <button id="refreshFieldsBtn" class="button button-secondary" style="padding: 5px 10px; font-size: 12px;">
+          <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+            <path d="M20 11A8.1 8.1 0 0 0 4.5 9"></path>
+            <path d="M4 5v4h4"></path>
+            <path d="M4 13a8.1 8.1 0 0 0 15.5 2"></path>
+            <path d="M20 19v-4h-4"></path>
+          </svg>
+          Refresh Fields
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="filter-controls">
+          <div class="filter-group">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search fields...">
+          </div>
+          <div class="filter-group">
+            <label class="filter-checkbox">
+              <input type="checkbox" id="showUnmappedOnlyCheckbox">
+              Show unmapped fields only
+            </label>
+          </div>
+        </div>
+        
+        <div id="fieldsTableContainer">
+          <table id="fieldsTable">
+            <thead>
+              <tr>
+                <th>Field Label</th>
+                <th>Field Type</th>
+                <th>Resume Field Mapping</th>
+              </tr>
+            </thead>
+            <tbody id="fieldsTableBody">
+              <tr>
+                <td colspan="3" class="empty-state">Loading form fields...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div id="noFieldsMessage" class="empty-state hidden">
+          <div class="empty-state-icon">🔍</div>
+          <p>No form fields found on this page</p>
+          <p>Make sure you're on a job application page with form fields</p>
+        </div>
+        
+        <div id="statusMessage" class="status-message hidden"></div>
+        
+        <div class="action-buttons">
+          <button id="cancelBtn" class="button button-secondary">
+            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            Cancel
+          </button>
+          <button id="saveBtn" class="button button-primary">
+            <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            Save Mappings
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">Help & Tips</div>
+      <div class="card-body">
+        <p><strong>How Field Mapping Works:</strong></p>
+        <ul>
+          <li>The left column shows form fields detected on the current job application page.</li>
+          <li>For each field, select the corresponding section/field from your resume in the right column.</li>
+          <li>Mappings are saved per website domain, so you only need to set them up once per job site.</li>
+          <li>After saving, you can use the "Autofill" button in the extension popup to fill out the form automatically.</li>
+        </ul>
+        
+        <p><strong>Tips:</strong></p>
+        <ul>
+          <li>If a field is incorrectly mapped, simply change the selection and save again.</li>
+          <li>For fields not found in your resume, leave them as "Not mapped".</li>
+          <li>Some fields may already be mapped using default patterns - you only need to fix the ones that don't work.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>JobFiller - Making job applications easier</p>
+    <p>&copy; 2025 - All rights reserved</p>
+  </div>
+  
+  <script src="resume-storage.js"></script>
+  <script src="field-mapper.js"></script>
+</body>
+</html>
