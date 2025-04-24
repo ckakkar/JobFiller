@@ -5,11 +5,14 @@
 
 class ResumeParser {
   constructor() {
-    // We'll use the PDF.js library that will be loaded with type="module"
-    this.pdfjs = window['pdfjs'];
-    // Set the PDF.js worker source (the worker file will be loaded from our extension)
-    if (this.pdfjs && this.pdfjs.GlobalWorkerOptions) {
-      this.pdfjs.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('pdf.worker.min.mjs');
+    this.pdfjs = window.pdfjsLib;
+    
+    // If PDF.js isn't available yet, listen for the load event
+    if (!this.pdfjs) {
+      document.addEventListener('pdfjs-loaded', () => {
+        this.pdfjs = window.pdfjsLib;
+        console.log('PDF.js now available to parser');
+      });
     }
   }
 
@@ -20,10 +23,34 @@ class ResumeParser {
    */
   async parsePDF(pdfData) {
     try {
+      // If PDF.js isn't loaded yet, wait for it
       if (!this.pdfjs) {
-        throw new Error('PDF.js library not loaded. Make sure pdf.min.mjs is imported correctly.');
+        console.log('Waiting for PDF.js to load...');
+        await new Promise((resolve) => {
+          const checkInterval = setInterval(() => {
+            if (window.pdfjsLib) {
+              this.pdfjs = window.pdfjsLib;
+              clearInterval(checkInterval);
+              resolve();
+            }
+          }, 100);
+          
+          // Add a timeout after 5 seconds
+          setTimeout(() => {
+            clearInterval(checkInterval);
+            if (!this.pdfjs) {
+              this.pdfjs = window.pdfjsLib;
+            }
+            resolve();
+          }, 5000);
+        });
       }
       
+      if (!this.pdfjs) {
+        throw new Error('PDF.js library not loaded. Please refresh the page and try again.');
+      }
+      
+      console.log('Starting PDF parsing...');
       const pdf = await this.pdfjs.getDocument({ data: pdfData }).promise;
       let fullText = '';
       

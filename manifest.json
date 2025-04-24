@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "JobFiller - Resume Autofill",
-  "version": "1.5",
-  "description": "Automatically fill out job applications using your resume data",
+  "name": "JobFiller Pro - Resume Autofill",
+  "version": "2.0",
+  "description": "Automatically fill out job applications using your resume data - with modern UI and enhanced parsing",
   "permissions": [
     "storage",
     "activeTab",
@@ -38,7 +38,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["pdf.worker.min.mjs"],
+      "resources": ["pdf.min.js", "pdf.worker.min.js", "pdf-loader.js", "fonts/*", "icons/*"],
       "matches": ["<all_urls>"]
     }
   ],

@@ -3,200 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JobFiller</title>
-  <style>
-    body {
-      width: 320px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    
-    header {
-      background: linear-gradient(135deg, #4a6cf7, #4a8ef7);
-      color: white;
-      padding: 15px;
-      text-align: center;
-      border-radius: 0 0 10px 10px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    
-    h1 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 600;
-    }
-    
-    .tagline {
-      font-size: 12px;
-      opacity: 0.9;
-      margin-top: 5px;
-    }
-    
-    .container {
-      padding: 15px;
-    }
-    
-    .resume-selector {
-      margin-bottom: 20px;
-    }
-    
-    .selector-label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 5px;
-      font-size: 14px;
-      color: #555;
-    }
-    
-    select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-      background-color: #f9f9f9;
-    }
-    
-    .action-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    
-    button {
-      padding: 12px;
-      border: none;
-      border-radius: 4px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s, transform 0.1s;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    button:active {
-      transform: scale(0.98);
-    }
-    
-    .primary-btn {
-      background-color: #4a6cf7;
-      color: white;
-    }
-    
-    .primary-btn:hover {
-      background-color: #3a5ce7;
-    }
-    
-    .secondary-btn {
-      background-color: #f0f0f0;
-      color: #333;
-    }
-    
-    .secondary-btn:hover {
-      background-color: #e0e0e0;
-    }
-    
-    .option-btn {
-      background-color: #fff;
-      color: #4a6cf7;
-      border: 1px solid #4a6cf7;
-    }
-    
-    .option-btn:hover {
-      background-color: #f5f8ff;
-    }
-    
-    .button-icon {
-      margin-right: 8px;
-      width: 16px;
-      height: 16px;
-    }
-    
-    .status-message {
-      margin-top: 15px;
-      padding: 10px;
-      border-radius: 4px;
-      font-size: 13px;
-      text-align: center;
-    }
-    
-    .success {
-      background-color: #e7f5ea;
-      color: #28a745;
-    }
-    
-    .error {
-      background-color: #f8d7da;
-      color: #dc3545;
-    }
-    
-    .info {
-      background-color: #e2f0fd;
-      color: #0d6efd;
-    }
-    
-    .warning {
-      background-color: #fff3cd;
-      color: #ffc107;
-    }
-    
-    .footer {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 12px;
-      color: #888;
-      padding-bottom: 10px;
-    }
-    
-    .footer a {
-      color: #4a6cf7;
-      text-decoration: none;
-    }
-    
-    .footer a:hover {
-      text-decoration: underline;
-    }
-    
-    .hidden {
-      display: none;
-    }
-  </style>
+  <title>JobFiller Pro</title>
+  <link rel="stylesheet" href="modern-styles.css">
 </head>
-<body>
-  <header>
-    <h1>JobFiller</h1>
-    <div class="tagline">Automated resume & job application filler</div>
+<body class="popup-body">
+  <header class="popup-header">
+    <h1>JobFiller Pro</h1>
+    <div class="subtitle">Smart resume auto-filler</div>
   </header>
   
-  <div class="container">
-    <div class="resume-selector">
-      <label class="selector-label" for="resumeSelect">Select Resume:</label>
+  <div class="popup-container">
+    <div class="form-group mb-6 animate-slide-in">
+      <label for="resumeSelect" class="selector-label">Select Resume:</label>
       <select id="resumeSelect">
         <option value="">Loading resumes...</option>
       </select>
     </div>
     
-    <div class="action-buttons">
-      <button id="fillFormBtn" class="primary-btn">
+    <div class="action-buttons animate-slide-in">
+      <button id="fillFormBtn" class="button button-primary mb-4">
         <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M20 6L9 17l-5-5"></path>
         </svg>
         Autofill This Application
       </button>
       
-      <button id="mapFieldsBtn" class="secondary-btn">
+      <button id="mapFieldsBtn" class="button button-secondary mb-4">
         <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 21v-7m0 0V7a4 4 0 014-4h12M4 14h12m0 0l-3-3m3 3l-3 3"></path>
         </svg>
         Map Fields for This Site
       </button>
       
-      <button id="openOptionsBtn" class="option-btn">
+      <button id="openOptionsBtn" class="button button-outline">
         <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="3"></circle>
           <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path>
@@ -205,15 +44,18 @@
       </button>
     </div>
     
-    <div id="statusMessage" class="status-message hidden"></div>
+    <div id="statusMessage" class="status-message hidden animate-slide-in"></div>
   </div>
   
-  <div class="footer">
-    <p>Made with ❤️ for easier job applications</p>
-    <p><a href="#" id="helpLink">Help & Tips</a></p>
+  <div class="footer" style="margin-top: 20px; padding: 15px 0; background: none; text-align: center;">
+    <p style="font-size: 12px; color: var(--gray-500);">Made with ❤️ for easier job applications</p>
+    <p style="font-size: 12px;"><a href="#" id="helpLink">Help & Tips</a></p>
   </div>
   
-  <script type="module" src="pdf.min.mjs"></script>
+  <!-- Load PDF.js first -->
+  <script src="pdf-loader.js"></script>
+  
+  <!-- Then load all dependent scripts -->
   <script src="resume-storage.js"></script>
   <script src="field-mapper.js"></script>
   <script src="popup.js"></script>

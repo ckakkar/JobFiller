@@ -4,7 +4,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Initialize storage manager and parser
+  // Initialize storage manager
   const storageManager = new ResumeStorageManager();
   
   // Get UI elements - Tabs
@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const dropArea = document.getElementById('dropArea');
   const uploadResumeBtn = document.getElementById('uploadResumeBtn');
   const uploadStatus = document.getElementById('uploadStatus');
+  const selectedFileInfo = document.getElementById('selectedFileInfo');
+  const selectedFileName = document.getElementById('selectedFileName');
+  const selectedFileSize = document.getElementById('selectedFileSize');
   
   // Get UI elements - JSON Resume
   const jsonEditor = document.getElementById('jsonEditor');
@@ -38,17 +41,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   const saveSettingsBtn = document.getElementById('saveSettingsBtn');
   const settingsStatus = document.getElementById('settingsStatus');
   
-  // Set up tab switching
+  // Set up tab switching with animation
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       // Deactivate all tabs
       tabs.forEach(t => t.classList.remove('active'));
-      tabContents.forEach(tc => tc.classList.remove('active'));
+      tabContents.forEach(tc => {
+        tc.classList.remove('active');
+        tc.style.display = 'none';
+      });
       
       // Activate the clicked tab
       tab.classList.add('active');
       const tabId = tab.getAttribute('data-tab');
-      document.getElementById(`${tabId}-content`).classList.add('active');
+      const targetContent = document.getElementById(`${tabId}-content`);
+      targetContent.style.display = 'block';
+      
+      // Trigger animation by forcing a reflow and then adding the active class
+      void targetContent.offsetWidth;
+      targetContent.classList.add('active');
     });
   });
   
@@ -215,6 +226,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   
   /**
+   * Format file size in human-readable format
+   */
+  function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+  
+  /**
    * Handle file selection for resume upload
    */
   function handleFileSelected() {
@@ -228,8 +252,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       resumeNameInput.value = fileName;
     }
     
-    // Show file name in drop area
-    dropArea.querySelector('.drop-area-text').textContent = file.name;
+    // Display file information
+    selectedFileName.textContent = file.name;
+    selectedFileSize.textContent = formatFileSize(file.size);
+    selectedFileInfo.classList.remove('hidden');
+    
+    // Change drop area text
+    document.querySelector('.drop-area-text').textContent = 'File selected! Click to change file.';
   }
   
   /**
@@ -257,23 +286,55 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Parse PDF file
         const fileData = await readFileAsArrayBuffer(file);
         
+        // Check if PDF.js is loaded
+        if (!window.pdfjsLib) {
+          // Wait for PDF.js to be available
+          showStatus(uploadStatus, 'Waiting for PDF.js to initialize...', 'info');
+          
+          await new Promise((resolve) => {
+            const checkInterval = setInterval(() => {
+              if (window.pdfjsLib) {
+                clearInterval(checkInterval);
+                resolve();
+              }
+            }, 200);
+            
+            // Timeout after 10 seconds
+            setTimeout(() => {
+              clearInterval(checkInterval);
+              resolve();
+            }, 10000);
+          });
+        }
+        
+        if (!window.pdfjsLib) {
+          showStatus(uploadStatus, 'Error: PDF.js library not loaded. Try refreshing the page.', 'error');
+          return;
+        }
+        
         // Initialize parser
         const parser = new ResumeParser();
-        const resumeData = await parser.parsePDF(fileData);
-        
-        // Save to storage
-        const success = await storageManager.saveResume(name, resumeData);
-        
-        if (success) {
-          showStatus(uploadStatus, 'Resume uploaded and parsed successfully!', 'success');
-          resumeNameInput.value = '';
-          resumeFileInput.value = '';
-          dropArea.querySelector('.drop-area-text').textContent = 'Drag & drop your resume file here or click to browse';
+        try {
+          const resumeData = await parser.parsePDF(fileData);
           
-          // Refresh resume list
-          await loadResumeList();
-        } else {
-          showStatus(uploadStatus, 'Error saving resume. Please try again.', 'error');
+          // Save to storage
+          const success = await storageManager.saveResume(name, resumeData);
+          
+          if (success) {
+            showStatus(uploadStatus, 'Resume uploaded and parsed successfully!', 'success');
+            resumeNameInput.value = '';
+            resumeFileInput.value = '';
+            selectedFileInfo.classList.add('hidden');
+            document.querySelector('.drop-area-text').textContent = 'Drag & drop your resume file here or click to browse';
+            
+            // Refresh resume list
+            await loadResumeList();
+          } else {
+            showStatus(uploadStatus, 'Error saving resume. Please try again.', 'error');
+          }
+        } catch (parseError) {
+          console.error('Error parsing PDF:', parseError);
+          showStatus(uploadStatus, 'Error parsing PDF: ' + parseError.message, 'error');
         }
       } else if (file.name.toLowerCase().endsWith('.json')) {
         // Parse JSON file
@@ -289,7 +350,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             showStatus(uploadStatus, 'JSON resume uploaded successfully!', 'success');
             resumeNameInput.value = '';
             resumeFileInput.value = '';
-            dropArea.querySelector('.drop-area-text').textContent = 'Drag & drop your resume file here or click to browse';
+            selectedFileInfo.classList.add('hidden');
+            document.querySelector('.drop-area-text').textContent = 'Drag & drop your resume file here or click to browse';
             
             // Refresh resume list
             await loadResumeList();
@@ -517,7 +579,25 @@ document.addEventListener('DOMContentLoaded', async () => {
    * Handle viewing field mappings
    */
   function handleViewMapping(domain, mappings) {
-    alert(`Field mappings for ${domain}:\n\n${JSON.stringify(mappings, null, 2)}`);
+    // Create a modal or better UI for viewing mappings
+    const formattedMappings = JSON.stringify(mappings, null, 2);
+    const modal = document.createElement('div');
+    modal.innerHTML = `
+      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+        <div style="background: white; border-radius: 8px; width: 600px; max-width: 90%; max-height: 80vh; overflow: auto; padding: 20px; position: relative;">
+          <button style="position: absolute; right: 20px; top: 20px; background: none; border: none; cursor: pointer; font-size: 24px;">&times;</button>
+          <h3 style="margin-top: 0;">Field mappings for ${domain}</h3>
+          <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; overflow: auto;">${formattedMappings}</pre>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Add event listener to close modal
+    modal.querySelector('button').addEventListener('click', () => {
+      document.body.removeChild(modal);
+    });
   }
   
   /**

@@ -172,8 +172,9 @@ document.addEventListener('DOMContentLoaded', async () => {
    */
   function showStatus(message, type = 'info') {
     statusMessage.textContent = message;
-    statusMessage.className = `status-message ${type}`;
+    statusMessage.className = `status-message status-${type}`;
     statusMessage.classList.remove('hidden');
+    statusMessage.classList.add('animate-slide-in');
   }
   
   /**

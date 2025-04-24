@@ -183,6 +183,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Field type
       const typeCell = document.createElement('td');
       typeCell.textContent = field.type;
+      typeCell.style.color = 'var(--gray-500)';
+      typeCell.style.fontSize = 'var(--font-size-sm)';
       row.appendChild(typeCell);
       
       // Mapping dropdown
@@ -199,9 +201,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       const emptyRow = document.createElement('tr');
       const emptyCell = document.createElement('td');
       emptyCell.colSpan = 3;
-      emptyCell.textContent = 'No fields match the current filter criteria';
-      emptyCell.style.textAlign = 'center';
-      emptyCell.style.padding = '20px';
+      emptyCell.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px; color: var(--gray-500);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 16px; margin: 0 auto 16px;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+          <div>No fields match the current filter criteria</div>
+        </div>
+      `;
       emptyRow.appendChild(emptyCell);
       fieldsTableBody.appendChild(emptyRow);
     }
