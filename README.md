@@ -119,5 +119,4 @@ _This project was built to streamline and automate the most tedious part of job 
 ## 🗣️ Contact
 
 For feedback or collaboration:
-- GitHub: [your-github-profile]
-- Email: [your-email@example.com]
+- Email: cyruskakkar@gmail.com
