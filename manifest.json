@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "JobFiller - Resume Autofill",
-  "version": "1.0",
+  "version": "1.5",
   "description": "Automatically fill out job applications using your resume data",
   "permissions": [
     "storage",
