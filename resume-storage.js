@@ -234,6 +234,3 @@ class ResumeStorageManager {
     }
   }
 }
-
-// Export the storage manager
-window.ResumeStorageManager = ResumeStorageManager;

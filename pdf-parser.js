@@ -5,9 +5,12 @@
 
 class ResumeParser {
   constructor() {
-    this.pdfjs = window['pdfjs-dist/build/pdf'];
-    // Set the PDF.js worker source
-    this.pdfjs.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('pdf.worker.min.js');
+    // We'll use the PDF.js library that will be loaded with type="module"
+    this.pdfjs = window['pdfjs'];
+    // Set the PDF.js worker source (the worker file will be loaded from our extension)
+    if (this.pdfjs && this.pdfjs.GlobalWorkerOptions) {
+      this.pdfjs.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('pdf.worker.min.mjs');
+    }
   }
 
   /**
@@ -17,6 +20,10 @@ class ResumeParser {
    */
   async parsePDF(pdfData) {
     try {
+      if (!this.pdfjs) {
+        throw new Error('PDF.js library not loaded. Make sure pdf.min.mjs is imported correctly.');
+      }
+      
       const pdf = await this.pdfjs.getDocument({ data: pdfData }).promise;
       let fullText = '';
       
@@ -706,6 +713,3 @@ class ResumeParser {
              line.includes('React')));
   }
 }
-
-// Export the parser
-window.ResumeParser = ResumeParser;

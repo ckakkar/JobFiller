@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       // Open the field mapping interface in a new tab
       await chrome.tabs.create({
-        url: `field-mapper.html?url=${encodeURIComponent(tab.url)}&domain=${encodeURIComponent(new URL(tab.url).hostname)}`
+        url: `field-mapper.html?url=${encodeURIComponent(tab.url)}&domain=${encodeURIComponent(new URL(tab.url).hostname)}&tabId=${tab.id}`
       });
       
       // Close the popup

@@ -499,6 +499,3 @@ class FieldMapper {
     return results;
   }
 }
-
-// Export the field mapper
-window.FieldMapper = FieldMapper;
