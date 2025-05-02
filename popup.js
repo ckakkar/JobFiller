@@ -65,23 +65,100 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   
   /**
-   * Check if OpenAI API key is configured
-   */
-  async function checkApiKey() {
-    try {
-      const apiSettings = await chrome.storage.sync.get('jobfiller_api_settings');
+ * Check if OpenAI API key is configured and show appropriate warnings
+ */
+async function checkApiKey() {
+  try {
+    const apiSettings = await chrome.storage.sync.get('jobfiller_api_settings');
+    
+    if (!apiSettings.jobfiller_api_settings?.apiKey) {
+      apiKeyWarning.classList.remove('hidden');
+      smartFillBtn.disabled = true;
       
-      if (!apiSettings.jobfiller_api_settings?.apiKey) {
+      // Update warning message to be more helpful
+      const warningText = apiKeyWarning.querySelector('span');
+      if (warningText) {
+        warningText.innerHTML = 'OpenAI API key not configured. <a href="#" id="setupApiLink">Set up API</a> to enable AI features.';
+        
+        // Re-attach the event listener
+        const setupApiLink = document.getElementById('setupApiLink');
+        if (setupApiLink) {
+          setupApiLink.addEventListener('click', handleSetupApi);
+        }
+      }
+    } else {
+      // Check if the API key status is valid
+      if (apiSettings.jobfiller_api_settings.apiStatus === 'error' || 
+          apiSettings.jobfiller_api_settings.apiStatus === 'invalid') {
+        
         apiKeyWarning.classList.remove('hidden');
         smartFillBtn.disabled = true;
+        
+        // Update warning message to indicate invalid key
+        const warningText = apiKeyWarning.querySelector('span');
+        if (warningText) {
+          warningText.innerHTML = 'OpenAI API key is invalid. <a href="#" id="setupApiLink">Update API key</a> to enable AI features.';
+          
+          // Re-attach the event listener
+          const setupApiLink = document.getElementById('setupApiLink');
+          if (setupApiLink) {
+            setupApiLink.addEventListener('click', handleSetupApi);
+          }
+        }
       } else {
         apiKeyWarning.classList.add('hidden');
         smartFillBtn.disabled = false;
       }
-    } catch (error) {
-      console.error('Error checking API key:', error);
+    }
+  } catch (error) {
+    console.error('Error checking API key:', error);
+    
+    // Show a generic error warning
+    apiKeyWarning.classList.remove('hidden');
+    const warningText = apiKeyWarning.querySelector('span');
+    if (warningText) {
+      warningText.innerHTML = 'Error checking API configuration. <a href="#" id="setupApiLink">Check settings</a>.';
+      
+      // Re-attach the event listener
+      const setupApiLink = document.getElementById('setupApiLink');
+      if (setupApiLink) {
+        setupApiLink.addEventListener('click', handleSetupApi);
+      }
     }
   }
+}
+
+/**
+ * Handle the setup API link click
+ */
+function handleSetupApi() {
+  try {
+    chrome.runtime.openOptionsPage();
+    
+    // Add a small delay before sending message to ensure options page is loaded
+    setTimeout(() => {
+      try {
+        chrome.runtime.sendMessage({ 
+          action: 'showApiSettings' 
+        }, (response) => {
+          if (chrome.runtime.lastError) {
+            console.error('Error sending showApiSettings message:', chrome.runtime.lastError);
+          }
+        });
+      } catch (msgError) {
+        console.error('Error sending message to open API settings:', msgError);
+      }
+    }, 300);
+    
+    window.close();
+  } catch (error) {
+    console.error('Error opening options page:', error);
+    
+    // Fallback method
+    chrome.tabs.create({ url: 'settings.html#api-settings' });
+    window.close();
+  }
+}
   
   /**
    * Load the list of available resumes
@@ -355,18 +432,6 @@ document.addEventListener('DOMContentLoaded', async () => {
    */
   function handleHelp() {
     chrome.tabs.create({ url: 'help.html' });
-    window.close();
-  }
-  
-  /**
-   * Handle the setup API link click
-   */
-  function handleSetupApi() {
-    chrome.runtime.openOptionsPage();
-    // Add a small delay before sending message to ensure options page is loaded
-    setTimeout(() => {
-      chrome.runtime.sendMessage({ action: 'showApiSettings' });
-    }, 100);
     window.close();
   }
   

@@ -272,45 +272,94 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   
   /**
-   * Test connection to OpenAI API
-   * @param {string} apiKey - OpenAI API key to test
-   * @param {string} model - OpenAI model to test
-   * @returns {Promise<string>} - Connection status ('connected', 'invalid', 'error')
-   */
+ * Test connection to OpenAI API
+ * @param {string} apiKey - OpenAI API key to test
+ * @param {string} model - OpenAI model to test
+ * @returns {Promise<string>} - Connection status ('connected', 'invalid', 'error')
+ */
   async function testConnection(apiKey, model) {
     try {
       console.log('Testing connection with key:', apiKey.substring(0, 3) + '...');
       
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: model,
-          messages: [
-            {
-              role: "system",
-              content: "You are a helpful assistant."
-            },
-            {
-              role: "user",
-              content: "Test connection. Respond with 'connected'."
+      // Make API request with timeout to prevent long waits
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+      
+      try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: model || "gpt-3.5-turbo", // Fallback to a simpler model for testing
+            messages: [
+              {
+                role: "system",
+                content: "You are a helpful assistant."
+              },
+              {
+                role: "user",
+                content: "Test connection. Respond with 'connected'."
+              }
+            ],
+            max_tokens: 10
+          })
+        });
+        
+        clearTimeout(timeoutId);
+        
+        // Check if response is valid
+        if (!response.ok) {
+          const error = await response.json();
+          console.error('API response error:', error);
+          
+          // Check for specific error types
+          if (error.error) {
+            // Authentication error
+            if (error.error.type === 'invalid_request_error' && 
+                error.error.message && 
+                error.error.message.includes('API key')) {
+              return 'invalid';
             }
-          ],
-          max_tokens: 10
-        })
-      });
-      
-      const data = await response.json();
-      console.log('API response:', data);
-      
-      if (response.ok && data.choices && data.choices[0].message.content.includes('connected')) {
-        return 'connected';
-      } else if (data.error && data.error.type === 'invalid_request_error') {
-        return 'invalid';
-      } else {
+            // Rate limiting error
+            else if (error.error.type === 'rate_limit_exceeded') {
+              return 'rate_limited';
+            }
+            // Model availability error
+            else if (error.error.message && error.error.message.includes('model')) {
+              return 'model_error';
+            }
+          }
+          
+          return 'error';
+        }
+        
+        const data = await response.json();
+        console.log('API response:', data);
+        
+        if (data.choices && 
+            data.choices[0] && 
+            data.choices[0].message && 
+            data.choices[0].message.content && 
+            data.choices[0].message.content.toLowerCase().includes('connected')) {
+          return 'connected';
+        } else {
+          console.log('Unexpected API response format:', data);
+          return 'error';
+        }
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        
+        // Handle abort errors separately
+        if (fetchError.name === 'AbortError') {
+          console.error('API request timed out');
+          return 'timeout';
+        }
+        
+        console.error('API connection test fetch error:', fetchError);
         return 'error';
       }
     } catch (error) {

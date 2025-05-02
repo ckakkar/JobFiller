@@ -94,9 +94,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   
   else if (message.action === 'showApiSettings') {
-    // Broadcast message to options page to show API settings tab
-    chrome.runtime.sendMessage({ action: 'switchToApiTab' });
-    return false; // Synchronous response
+    // Store the request to show API settings tab
+    chrome.storage.local.set({ 'show_api_settings': true }, () => {
+      if (chrome.runtime.lastError) {
+        console.error('Error storing show_api_settings flag:', chrome.runtime.lastError);
+        sendResponse({ success: false, error: chrome.runtime.lastError.message });
+      } else {
+        sendResponse({ success: true });
+      }
+    });
+    return true; // Required for async sendResponse
   }
   
   else if (message.action === 'checkForUpdates') {

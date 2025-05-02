@@ -284,13 +284,43 @@
         }
       });
       
-      // Set up button action
-      document.getElementById('setupApiBtn').addEventListener('click', () => {
-        chrome.runtime.openOptionsPage();
-        setTimeout(() => {
-          chrome.runtime.sendMessage({ action: 'showApiSettings' });
-        }, 100);
-      });
+      // Set up button action with improved error handling
+      const setupApiBtn = document.getElementById('setupApiBtn');
+      if (setupApiBtn) {
+        setupApiBtn.addEventListener('click', async () => {
+          try {
+            console.log('Configure API button clicked');
+            
+            // Try to open options page
+            await chrome.runtime.openOptionsPage();
+            
+            // Wait a moment to ensure options page is open before sending message
+            setTimeout(() => {
+              try {
+                chrome.runtime.sendMessage({ 
+                  action: 'showApiSettings'
+                }, (response) => {
+                  // Check for error in the response
+                  if (chrome.runtime.lastError) {
+                    console.error('Error sending message:', chrome.runtime.lastError);
+                  } else {
+                    console.log('Message sent successfully');
+                  }
+                });
+              } catch (msgError) {
+                console.error('Error sending message:', msgError);
+              }
+            }, 300);
+          } catch (error) {
+            console.error('Error opening options page:', error);
+            
+            // Fallback: Open options.html directly if openOptionsPage fails
+            chrome.tabs.create({ url: 'settings.html#api-settings' });
+          }
+        });
+      } else {
+        console.error('Setup API button not found in the DOM');
+      }
     });
   </script>
 </body>

@@ -108,10 +108,13 @@ class OpenAIResumeParser {
       }
       
       try {
-        // Truncate text if it's too long (OpenAI has token limits)
-        const truncatedText = text.substring(0, 15000); // Adjust based on your token budget
+        // Chunk the text to handle large PDFs that exceed token limits
+        // We'll use a simplified approach - truncate to avoid token limit issues
+        // For a more robust solution, we would implement chunking logic
+        const maxLength = 6000; // Reduced from original to ensure we stay well under the token limit
+        const truncatedText = text.substring(0, maxLength);
         
-        // Prepare the API request
+        // Prepare the API request with better prompting and truncated text
         const response = await fetch(this.apiEndpoint, {
           method: 'POST',
           headers: {
@@ -123,50 +126,99 @@ class OpenAIResumeParser {
             messages: [
               {
                 role: "system", 
-                content: "You are an expert resume parser. Extract structured information from the resume text and format it as JSON. Include the following sections: personal information (name, email, phone, address, LinkedIn URL, website), summary, experience (company, title, dates, description, location), education (school, degree, field, dates, GPA), skills, certifications, and projects."
+                content: "You are an expert resume parser. Extract structured information from the resume text and format it as JSON. Include the following sections if found in the resume: personal information (name, email, phone, address, LinkedIn URL, website), summary, experience (company, title, dates, description, location), education (school, degree, field, dates, GPA), skills, certifications, and projects. NOTE: The resume may have been truncated due to length limitations, so please work with the available content."
               },
               {
                 role: "user",
-                content: `Parse this resume into structured JSON:\n\n${truncatedText}`
+                content: `Parse this resume into structured JSON. This may be incomplete due to truncation:\n\n${truncatedText}`
               }
             ],
             temperature: 0.1, // Lower temperature for more consistent results
-            max_tokens: 1500 // Adjust based on expected output size
+            max_tokens: 1000 // Reduced to avoid response token limits
           })
         });
         
         const result = await response.json();
         
         if (!response.ok) {
-          throw new Error(`OpenAI API Error: ${result.error.message}`);
+          if (result.error && result.error.message) {
+            throw new Error(`OpenAI API Error: ${result.error.message}`);
+          } else {
+            throw new Error(`OpenAI API Error: Unknown error occurred (status ${response.status})`);
+          }
         }
         
         // Parse the OpenAI response to extract the JSON
         const content = result.choices[0].message.content;
         
-        // Try to extract JSON from the content
+        // Enhanced JSON extraction with multiple fallbacks
         try {
           // First try to parse the whole response as JSON
           return JSON.parse(content);
         } catch (e) {
-          // If that fails, try to extract JSON from markdown code blocks
+          console.log("Could not parse entire response as JSON, trying to extract JSON object");
+          
+          // Try to extract JSON from markdown code blocks
           const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
           if (jsonMatch && jsonMatch[1]) {
-            return JSON.parse(jsonMatch[1]);
+            try {
+              return JSON.parse(jsonMatch[1]);
+            } catch (e2) {
+              console.log("Could not parse code block as JSON, trying to find JSON object");
+            }
           }
           
-          // If still no JSON found, try to find anything that looks like JSON
-          const jsonObjectMatch = content.match(/{[\s\S]*}/);
-          if (jsonObjectMatch) {
-            return JSON.parse(jsonObjectMatch[0]);
+          // Try to find JSON object with balanced braces
+          try {
+            const jsonObjectMatch = this.extractJSONObject(content);
+            if (jsonObjectMatch) {
+              return JSON.parse(jsonObjectMatch);
+            }
+          } catch (e3) {
+            console.log("Could not extract JSON object with regex");
           }
           
-          throw new Error('Could not parse OpenAI response as JSON');
+          // Last resort - create a minimal valid resume object
+          console.log("Creating fallback minimal resume object");
+          return {
+            personal: {
+              name: "Unknown Name",
+              email: "",
+              phone: ""
+            },
+            experience: [],
+            education: [],
+            skills: []
+          };
         }
       } catch (error) {
         console.error('Error calling OpenAI API:', error);
         throw new Error('Failed to parse resume with OpenAI: ' + error.message);
       }
+    }
+    
+    /**
+     * Extract JSON object from text by finding balanced braces
+     * @param {string} text - Text possibly containing JSON
+     * @returns {string|null} - Extracted JSON string or null
+     */
+    extractJSONObject(text) {
+      let openBraces = 0;
+      let startIndex = -1;
+      
+      for (let i = 0; i < text.length; i++) {
+        if (text[i] === '{') {
+          if (openBraces === 0) startIndex = i;
+          openBraces++;
+        } else if (text[i] === '}') {
+          openBraces--;
+          if (openBraces === 0 && startIndex !== -1) {
+            return text.substring(startIndex, i + 1);
+          }
+        }
+      }
+      
+      return null;
     }
   
     /**
@@ -183,4 +235,4 @@ class OpenAIResumeParser {
         throw new Error('Invalid JSON format: ' + error.message);
       }
     }
-  }
+}
