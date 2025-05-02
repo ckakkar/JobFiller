@@ -9,34 +9,81 @@
 <body class="popup-body">
   <header class="popup-header">
     <h1>JobFiller Pro</h1>
-    <div class="subtitle">Smart resume auto-filler</div>
+    <div class="subtitle">AI-powered resume autofill</div>
   </header>
   
   <div class="popup-container">
+    <!-- Resume Selector -->
     <div class="form-group mb-6 animate-slide-in">
       <label for="resumeSelect" class="selector-label">Select Resume:</label>
-      <select id="resumeSelect">
-        <option value="">Loading resumes...</option>
-      </select>
+      <div class="input-group">
+        <svg class="input-group-text" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        <select id="resumeSelect" class="input-with-icon">
+          <option value="">Loading resumes...</option>
+        </select>
+      </div>
     </div>
     
+    <!-- Application Status -->
+    <div id="applicationInfo" class="application-status mb-6 animate-slide-in hidden">
+      <div class="application-info-title">Current Application</div>
+      <div class="application-info-site" id="applicationSite">linkedin.com</div>
+      <div class="application-info-details">
+        <div class="application-info-stat">
+          <div class="stat-value" id="formFieldsCount">24</div>
+          <div class="stat-label">Form Fields</div>
+        </div>
+        <div class="application-info-stat">
+          <div class="stat-value" id="mappedFieldsCount">18</div>
+          <div class="stat-label">Mapped</div>
+        </div>
+        <div class="application-info-stat">
+          <div class="stat-value success-text" id="confidenceScore">85%</div>
+          <div class="stat-label">AI Confidence</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
     <div class="action-buttons animate-slide-in">
       <button id="fillFormBtn" class="button button-primary mb-4">
-        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 6L9 17l-5-5"></path>
         </svg>
         Autofill This Application
       </button>
       
+      <button id="smartFillBtn" class="button button-secondary mb-4">
+        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a10 10 0 0 0-10 10c0 5.5 5 10 10 10s10-4.5 10-10a10 10 0 0 0-10-10Z"></path>
+          <path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+          <path d="M12 7V5"></path>
+          <path d="M12 19v-2"></path>
+          <path d="m16.95 8.05 1.41-1.41"></path>
+          <path d="m5.64 17.36 1.41-1.41"></path>
+          <path d="M19 12h2"></path>
+          <path d="M3 12h2"></path>
+          <path d="m16.95 15.95 1.41 1.41"></path>
+          <path d="m5.64 6.64 1.41 1.41"></path>
+        </svg>
+        Smart AI Fill
+      </button>
+      
       <button id="mapFieldsBtn" class="button button-secondary mb-4">
-        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 21v-7m0 0V7a4 4 0 014-4h12M4 14h12m0 0l-3-3m3 3l-3 3"></path>
         </svg>
         Map Fields for This Site
       </button>
       
       <button id="openOptionsBtn" class="button button-outline">
-        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"></circle>
           <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path>
         </svg>
@@ -44,19 +91,28 @@
       </button>
     </div>
     
+    <!-- Status Message -->
     <div id="statusMessage" class="status-message hidden animate-slide-in"></div>
+    
+    <!-- API Key Warning -->
+    <div id="apiKeyWarning" class="api-key-warning mt-4 hidden animate-slide-in">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span>OpenAI API key not configured. <a href="#" id="setupApiLink">Set up API</a></span>
+    </div>
   </div>
   
-  <div class="footer" style="margin-top: 20px; padding: 15px 0; background: none; text-align: center;">
-    <p style="font-size: 12px; color: var(--gray-500);">Made with ❤️ for easier job applications</p>
-    <p style="font-size: 12px;"><a href="#" id="helpLink">Help & Tips</a></p>
+  <div class="footer">
+    <p>Made with AI for easier job applications</p>
+    <p><a href="#" id="helpLink">Help & Tips</a></p>
   </div>
   
-  <!-- Load PDF.js first -->
-  <script src="pdf-loader.js"></script>
-  
-  <!-- Then load all dependent scripts -->
+  <!-- Load scripts -->
   <script src="resume-storage.js"></script>
+  <script src="openai-parser.js"></script>
   <script src="field-mapper.js"></script>
   <script src="popup.js"></script>
 </body>

@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "JobFiller Pro - Resume Autofill",
-  "version": "2.0",
-  "description": "Automatically fill out job applications using your resume data - with modern UI and enhanced parsing",
+  "name": "JobFiller Pro - AI Resume Autofill",
+  "version": "3.0",
+  "description": "Automatically fill out job applications using your resume data - now powered by AI for smarter filling",
   "permissions": [
     "storage",
     "activeTab",
-    "scripting"
+    "scripting",
+    "alarms"
   ],
   "host_permissions": [
     "https://*/*",
@@ -25,7 +26,7 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "options_page": "options.html",
+  "options_page": "settings.html",
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -38,7 +39,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["pdf.min.js", "pdf.worker.min.js", "pdf-loader.js", "fonts/*", "icons/*"],
+      "resources": ["resume-storage.js", "field-mapper.js", "openai-parser.js", "fonts/*", "icons/*"],
       "matches": ["<all_urls>"]
     }
   ],

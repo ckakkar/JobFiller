@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to JobFiller Pro</title>
+  <link rel="stylesheet" href="modern-styles.css">
+  <style>
+    .welcome-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-4);
+    }
+    
+    .hero-section {
+      text-align: center;
+      margin: var(--spacing-12) 0;
+    }
+    
+    .hero-title {
+      font-size: var(--font-size-4xl);
+      font-weight: 700;
+      margin-bottom: var(--spacing-4);
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .hero-subtitle {
+      font-size: var(--font-size-xl);
+      color: var(--gray-600);
+      margin-bottom: var(--spacing-8);
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-6);
+      margin-bottom: var(--spacing-12);
+    }
+    
+    .feature-card {
+      background-color: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow);
+      padding: var(--spacing-6);
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--primary-gradient);
+    }
+    
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: var(--spacing-4);
+      color: var(--primary-color);
+    }
+    
+    .feature-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      margin-bottom: var(--spacing-2);
+    }
+    
+    .feature-description {
+      color: var(--gray-600);
+    }
+    
+    .getting-started {
+      background-color: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow);
+      padding: var(--spacing-8);
+      margin-bottom: var(--spacing-12);
+    }
+    
+    .getting-started h2 {
+      margin-bottom: var(--spacing-6);
+      font-size: var(--font-size-2xl);
+      color: var(--gray-800);
+    }
+    
+    .step {
+      display: flex;
+      margin-bottom: var(--spacing-6);
+      position: relative;
+    }
+    
+    .step:last-child {
+      margin-bottom: 0;
+    }
+    
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-right: var(--spacing-4);
+      flex-shrink: 0;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-title {
+      font-weight: 600;
+      margin-bottom: var(--spacing-2);
+    }
+    
+    .cta-section {
+      text-align: center;
+      margin-bottom: var(--spacing-12);
+    }
+    
+    .button-xl {
+      padding: var(--spacing-4) var(--spacing-8);
+      font-size: var(--font-size-lg);
+      border-radius: var(--border-radius);
+    }
+    
+    /* Dark theme support */
+    .dark-theme .feature-card,
+    .dark-theme .getting-started {
+      background-color: var(--dark-surface);
+    }
+    
+    .dark-theme .feature-description {
+      color: var(--dark-text-secondary);
+    }
+    
+    .dark-theme .hero-subtitle {
+      color: var(--dark-text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JobFiller Pro</h1>
+    <div class="subtitle">AI-powered resume management for faster job applications</div>
+  </header>
+  
+  <div class="welcome-container">
+    <div class="hero-section">
+      <h1 class="hero-title">Welcome to JobFiller Pro</h1>
+      <p class="hero-subtitle">The smarter way to fill out job applications, powered by AI</p>
+      <p>Your time is valuable. Stop wasting it filling out the same information over and over.</p>
+    </div>
+    
+    <div class="feature-grid">
+      <div class="feature-card">
+        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <h3 class="feature-title">AI-Powered Resume Parsing</h3>
+        <p class="feature-description">Upload your resume once and our AI will extract all the important details, organizing them for quick access.</p>
+      </div>
+      
+      <div class="feature-card">
+        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="17 1 21 5 17 9"></polyline>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+          <polyline points="7 23 3 19 7 15"></polyline>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+        </svg>
+        <h3 class="feature-title">Smart Form Mapping</h3>
+        <p class="feature-description">Our AI automatically identifies form fields on job applications and maps them to your resume data, even on sites you've never visited before.</p>
+      </div>
+      
+      <div class="feature-card">
+        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a10 10 0 1 0 10 10H12V2Z"></path>
+          <path d="M12 2a10 10 0 0 1 10 10"></path>
+          <path d="M12 12 2.5 20"></path>
+        </svg>
+        <h3 class="feature-title">One-Click Autofill</h3>
+        <p class="feature-description">Fill out entire job applications with a single click, saving you hours of repetitive data entry.</p>
+      </div>
+      
+      <div class="feature-card">
+        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 7h-9"></path>
+          <path d="M14 17H5"></path>
+          <circle cx="17" cy="17" r="3"></circle>
+          <circle cx="7" cy="7" r="3"></circle>
+        </svg>
+        <h3 class="feature-title">Multiple Resume Management</h3>
+        <p class="feature-description">Store different versions of your resume for different job types and easily switch between them.</p>
+      </div>
+      
+      <div class="feature-card">
+        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+        <h3 class="feature-title">Works Everywhere</h3>
+        <p class="feature-description">Compatible with all major job boards and applicant tracking systems, giving you a seamless experience across the web.</p>
+      </div>
+      
+      <div class="feature-card">
+        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <h3 class="feature-title">Privacy First</h3>
+        <p class="feature-description">Your data stays in your browser. We don't store your resume on our servers, ensuring your personal information remains private.</p>
+      </div>
+    </div>
+    
+    <div class="getting-started">
+      <h2>Getting Started in 3 Easy Steps</h2>
+      
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <div class="step-title">Configure Your OpenAI API</div>
+          <p>JobFiller Pro uses OpenAI to intelligently parse resumes and map form fields. Enter your API key in the settings to get started.</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <div class="step-title">Upload Your Resume</div>
+          <p>Upload your resume (PDF or JSON). Our AI will extract all the important information, organizing it for quick access.</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <div class="step-title">Start Applying to Jobs</div>
+          <p>Visit any job application page, click the JobFiller icon, and fill the entire form with a single click!</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="cta-section">
+      <button id="setupApiBtn" class="button button-primary button-xl">
+        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3H5a2 2 0 0 0-2 2v4"></path>
+          <path d="M9 21H5a2 2 0 0 1-2-2v-4"></path>
+          <path d="M21 3h-4a2 2 0 0 0-2 2v4"></path>
+          <path d="M21 21h-4a2 2 0 0 1-2-2v-4"></path>
+        </svg>
+        Configure API & Get Started
+      </button>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>JobFiller Pro - Making job applications easier</p>
+    <p>© 2025 - All rights reserved</p>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check for dark mode
+      chrome.storage.sync.get('jobfiller_settings', (settings) => {
+        if (settings.jobfiller_settings?.darkMode) {
+          document.body.classList.add('dark-theme');
+        }
+      });
+      
+      // Set up button action
+      document.getElementById('setupApiBtn').addEventListener('click', () => {
+        chrome.runtime.openOptionsPage();
+        setTimeout(() => {
+          chrome.runtime.sendMessage({ action: 'showApiSettings' });
+        }, 100);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobFiller Pro - Settings</title>
+  <link rel="stylesheet" href="modern-styles.css">
+</head>
+<body>
+  <header>
+    <h1>JobFiller Pro</h1>
+    <div class="subtitle">Smart resume management for faster job applications</div>
+  </header>
+  
+  <div class="container">
+    <div class="tabs">
+      <div class="tab" data-tab="manage-resumes">Manage Resumes</div>
+      <div class="tab active" data-tab="upload-resume">Upload Resume</div>
+      <div class="tab" data-tab="field-mappings">Field Mappings</div>
+      <div class="tab" data-tab="settings">Settings</div>
+      <div class="tab" data-tab="api-settings">API Settings</div>
+    </div>
+    
+    <!-- Upload Resume Tab -->
+    <div class="tab-content active" id="upload-resume-content">
+      <div class="card animate-slide-in">
+        <div class="card-header">Upload New Resume</div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="resumeName">Resume Name/Label:</label>
+            <input type="text" id="resumeName" placeholder="e.g. Software Developer Resume 2025">
+          </div>
+          
+          <div class="form-group">
+            <label>Upload Resume File (PDF):</label>
+            <div class="drop-area" id="dropArea">
+              <div class="drop-area-icon">📁</div>
+              <div class="drop-area-text">Drag & drop your resume file here<br>or click to browse</div>
+              <input type="file" id="resumeFile" class="file-input" accept=".pdf,.json">
+              
+              <div class="selected-file hidden" id="selectedFileInfo">
+                <div class="file-icon">📄</div>
+                <div class="file-name" id="selectedFileName">filename.pdf</div>
+                <div class="file-size" id="selectedFileSize">0 KB</div>
+              </div>
+            </div>
+            <div class="mt-2" style="color: var(--gray-500); font-size: var(--font-size-sm);">
+              Accepted formats: PDF, JSON
+            </div>
+          </div>
+          
+          <div class="form-group" style="text-align: right;">
+            <button id="uploadResumeBtn" class="button button-primary">
+              <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              Upload Resume
+            </button>
+          </div>
+          
+          <div id="uploadStatus" class="status-message hidden"></div>
+        </div>
+      </div>
+      
+      <div class="card animate-slide-in">
+        <div class="card-header">Create/Edit Resume Directly</div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="jsonEditor">Resume JSON:</label>
+            <textarea id="jsonEditor" class="json-editor" placeholder='{
+  "personal": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "123-456-7890",
+    "address": "New York, NY",
+    "linkedin": "https://www.linkedin.com/in/johndoe",
+    "website": "https://johndoe.com"
+  },
+  "summary": "Experienced software developer...",
+  "experience": [
+    {
+      "company": "Tech Company",
+      "title": "Senior Developer",
+      "startDate": "Jan 2020",
+      "endDate": "Present",
+      "location": "New York, NY",
+      "description": "Working on...",
+      "bullets": [
+        "Developed feature X that improved Y by Z%",
+        "Led team of 5 developers"
+      ]
+    }
+  ],
+  "education": [],
+  "skills": []
+}'></textarea>
+          </div>
+          
+          <div class="form-group" style="text-align: right;">
+            <button id="saveJsonResumeBtn" class="button button-primary">
+              <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+              Save JSON Resume
+            </button>
+          </div>
+          
+          <div id="jsonStatus" class="status-message hidden"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Manage Resumes Tab -->
+    <div class="tab-content" id="manage-resumes-content">
+      <div class="card animate-slide-in">
+        <div class="card-header">
+          <span>Your Resumes</span>
+          <button id="refreshResumeListBtn" class="action-button" title="Refresh list">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 11A8.1 8.1 0 0 0 4.5 9"></path>
+              <path d="M4 5v4h4"></path>
+              <path d="M4 13a8.1 8.1 0 0 0 15.5 2"></path>
+              <path d="M20 19v-4h-4"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="card-body">
+          <div id="resumeList" class="resume-list">
+            <!-- Resume items will be populated here -->
+            <div class="empty-state" id="noResumesMessage">
+              <div class="empty-state-icon">📄</div>
+              <div class="empty-state-title">No resumes found</div>
+              <p class="empty-state-description">Upload a resume to get started with auto-filling job applications</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Field Mappings Tab -->
+    <div class="tab-content" id="field-mappings-content">
+      <div class="card animate-slide-in">
+        <div class="card-header">Site Field Mappings</div>
+        <div class="card-body">
+          <p>Field mappings allow JobFiller to correctly identify form fields on specific websites.</p>
+          <p class="mb-6">You can set up custom field mappings when you click "Map Fields for This Site" in the extension popup.</p>
+          
+          <div id="mappingsList">
+            <!-- Mapping items will be populated here -->
+            <div class="empty-state" id="noMappingsMessage">
+              <div class="empty-state-icon">🔗</div>
+              <div class="empty-state-title">No custom field mappings yet</div>
+              <p class="empty-state-description">Mappings will be created when you use the extension on job sites</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Settings Tab -->
+    <div class="tab-content" id="settings-content">
+      <div class="card animate-slide-in">
+        <div class="card-header">General Settings</div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="defaultResumeSelect">Default Resume:</label>
+            <select id="defaultResumeSelect">
+              <option value="">Loading resumes...</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="flex-item">
+              <input type="checkbox" id="autofillOnLoadCheckbox">
+              <span style="margin-left: 8px;">Automatically fill forms when page loads</span>
+            </label>
+            <div class="help-text">
+              When enabled, JobFiller will attempt to fill out job applications automatically when the page loads
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="flex-item">
+              <input type="checkbox" id="darkModeCheckbox">
+              <span style="margin-left: 8px;">Use dark mode</span>
+            </label>
+            <div class="help-text">
+              Enable dark mode for a more comfortable viewing experience in low-light environments
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="autofillDelaySelect">Autofill Delay:</label>
+            <select id="autofillDelaySelect">
+              <option value="0">No delay</option>
+              <option value="500">0.5 seconds</option>
+              <option value="1000">1 second</option>
+              <option value="2000" selected>2 seconds</option>
+              <option value="3000">3 seconds</option>
+              <option value="5000">5 seconds</option>
+            </select>
+            <div class="help-text">
+              Set a delay before auto-filling to ensure the page is fully loaded
+            </div>
+          </div>
+          
+          <div class="form-group" style="text-align: right;">
+            <button id="saveSettingsBtn" class="button button-primary">
+              <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+              Save Settings
+            </button>
+          </div>
+          
+          <div id="settingsStatus" class="status-message hidden"></div>
+        </div>
+      </div>
+      
+      <div class="card animate-slide-in">
+        <div class="card-header">About JobFiller Pro</div>
+        <div class="card-body">
+          <p><strong>Version:</strong> 3.0</p>
+          <p class="mb-4">JobFiller Pro is an enhanced Chrome extension that streamlines the job application process by automatically filling out forms using your resume data, powered by AI.</p>
+          <p>All your data is stored locally in your browser. Your privacy matters to us.</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- API Settings Tab -->
+    <div class="tab-content" id="api-settings-content">
+      <div class="card animate-slide-in">
+        <div class="card-header">OpenAI API Configuration</div>
+        <div class="card-body">
+          <p class="mb-4">JobFiller Pro uses OpenAI's API to intelligently parse resumes and map fields to job applications.</p>
+          
+          <div class="form-group">
+            <label for="openaiApiKey">OpenAI API Key:</label>
+            <div class="input-group">
+              <input type="password" id="openaiApiKey" placeholder="sk-..." autocomplete="off">
+              <button class="input-group-btn" id="toggleApiKeyVisibility" title="Toggle visibility">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+            <div class="help-text">Your OpenAI API key will be stored securely in your browser's local storage.</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="openaiModel">OpenAI Model:</label>
+            <select id="openaiModel">
+              <option value="gpt-4o">GPT-4o (Recommended)</option>
+              <option value="gpt-4">GPT-4</option>
+              <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Faster, less accurate)</option>
+            </select>
+            <div class="help-text">Select the OpenAI model to use for resume parsing. More powerful models provide better results but may cost more.</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="flex-item">
+              <input type="checkbox" id="useOpenAIForFieldMapping">
+              <span style="margin-left: 8px;">Use AI for automatic field mapping</span>
+            </label>
+            <div class="help-text">When enabled, JobFiller will use OpenAI to automatically detect and map form fields on job sites.</div>
+          </div>
+          
+          <div class="api-status mt-4 hidden" id="apiStatusContainer">
+            <div class="api-status-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <div class="api-status-text">
+              <div class="api-status-title">API Connected</div>
+              <div class="api-status-detail">Your OpenAI API key is valid and working properly.</div>
+            </div>
+          </div>
+          
+          <div class="form-group" style="text-align: right;">
+            <button id="testApiConnectionBtn" class="button button-secondary mr-2">
+              <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+              Test Connection
+            </button>
+            <button id="saveApiSettingsBtn" class="button button-primary">
+              <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+              Save API Settings
+            </button>
+          </div>
+          
+          <div id="apiSettingsStatus" class="status-message hidden"></div>
+        </div>
+      </div>
+      
+      <div class="card animate-slide-in">
+        <div class="card-header">Pricing & Usage Information</div>
+        <div class="card-body">
+          <p>Using the OpenAI API requires an OpenAI account and may incur charges based on your usage:</p>
+          
+          <ul>
+            <li>Resume parsing typically uses approximately 1,000-2,000 tokens per resume</li>
+            <li>Field mapping uses approximately a few hundred tokens per job application page</li>
+            <li>Check <a href="https://openai.com/pricing" target="_blank">OpenAI's pricing page</a> for current rates</li>
+          </ul>
+          
+          <div class="usage-meter mt-4">
+            <div class="usage-meter-label">Estimated token usage this month:</div>
+            <div class="usage-meter-bar">
+              <div class="usage-meter-fill" style="width: 15%;"></div>
+            </div>
+            <div class="usage-meter-stats">
+              <span>0 tokens</span>
+              <span id="estimatedTokenUsage">~1,500 tokens</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>JobFiller Pro - Making job applications easier</p>
+    <p>© 2025 - All rights reserved</p>
+  </div>
+  
+  <!-- Load scripts -->
+  <script src="resume-storage.js"></script>
+  <script src="openai-parser.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>

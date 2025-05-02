@@ -1,13 +1,31 @@
 /**
  * Background Service Worker
- * Handles communication between different parts of the extension
+ * Handles communication between different parts of the extension with OpenAI integration
  */
 
 // Listen for extension installation or update
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    // Open options page on initial installation
-    chrome.runtime.openOptionsPage();
+    // Open welcome page on initial installation
+    chrome.tabs.create({
+      url: chrome.runtime.getURL('welcome.html')
+    });
+  } else if (details.reason === 'update') {
+    // Check if this is a major version update
+    const previousVersion = details.previousVersion;
+    const currentVersion = chrome.runtime.getManifest().version;
+    
+    if (previousVersion && currentVersion) {
+      const prevMajor = parseInt(previousVersion.split('.')[0]);
+      const currMajor = parseInt(currentVersion.split('.')[0]);
+      
+      if (currMajor > prevMajor) {
+        // Open update notes page on major version update
+        chrome.tabs.create({
+          url: chrome.runtime.getURL('update-notes.html')
+        });
+      }
+    }
   }
 });
 
@@ -74,6 +92,49 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     
     return false; // Synchronous response
   }
+  
+  else if (message.action === 'showApiSettings') {
+    // Broadcast message to options page to show API settings tab
+    chrome.runtime.sendMessage({ action: 'switchToApiTab' });
+    return false; // Synchronous response
+  }
+  
+  else if (message.action === 'checkForUpdates') {
+    // Check if there are any updates for the extension
+    // This is a placeholder - Chrome Web Store handles updates automatically
+    sendResponse({
+      success: true,
+      hasUpdate: false,
+      currentVersion: chrome.runtime.getManifest().version
+    });
+    
+    return false; // Synchronous response
+  }
+  
+  else if (message.action === 'trackEvent') {
+    // Track usage analytics (if user has opted in)
+    const { eventName, eventData } = message;
+    
+    // First check if user has opted in to analytics
+    chrome.storage.sync.get('jobfiller_settings')
+      .then(settings => {
+        const analyticsEnabled = settings.jobfiller_settings?.analyticsEnabled || false;
+        
+        if (analyticsEnabled) {
+          // Here you would implement actual analytics tracking
+          // This is just a placeholder
+          console.log('Analytics event tracked:', eventName, eventData);
+        }
+        
+        sendResponse({ success: true });
+      })
+      .catch(error => {
+        console.error('Error checking analytics settings:', error);
+        sendResponse({ success: false });
+      });
+    
+    return true; // Required for async sendResponse
+  }
 });
 
 // Handle browser action click (extension icon)
@@ -114,6 +175,26 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       })
       .catch(error => {
         console.error('Error getting settings:', error);
+      });
+  }
+});
+
+// Check for OpenAI API credits/usage periodically (if configured)
+chrome.alarms.create('checkApiUsage', { periodInMinutes: 1440 }); // Check once a day
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === 'checkApiUsage') {
+    // Get API settings
+    chrome.storage.sync.get('jobfiller_api_settings')
+      .then(apiSettings => {
+        if (apiSettings.jobfiller_api_settings?.apiKey) {
+          // Here you would implement a check to the OpenAI API for usage
+          // This is a placeholder - actual implementation would depend on OpenAI's API
+          console.log('Checking API usage...');
+        }
+      })
+      .catch(error => {
+        console.error('Error checking API usage:', error);
       });
   }
 });
